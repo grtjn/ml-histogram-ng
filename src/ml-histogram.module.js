@@ -1,5 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('ml.histogram', []);
+  angular.module('ml.histogram', [
+    'ml.histogram.tpls'
+  ]);
 }());
