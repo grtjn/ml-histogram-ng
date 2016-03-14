@@ -1,13 +1,15 @@
 {
   "name": "ml-histogram-ng",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Angular directive for showing one or more dynamic date bucket MarkLogic facets as a histogram",
   "main": [
     "dist/ml-histogram-ng.js",
     "dist/ml-histogram-ng.css"
   ],
   "dependencies": {
-    "angular": ">1.3.1"
+    "angular": ">1.3.1",
+    "highcharts": "~4.1.9",
+    "highcharts-ng": "~0.0.11"
   },
   "devDependencies": {
     "angular-mocks": ">1.2.14"
@@ -27,7 +29,8 @@
     "angular",
     "angularjs",
     "marklogic",
-    "sparql"
+    "highcharts",
+    "histogram"
   ],
   "license": "Apache-2.0",
   "ignore": [
