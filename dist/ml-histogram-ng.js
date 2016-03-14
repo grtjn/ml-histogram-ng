@@ -285,16 +285,22 @@
 
         ctrl.histogram.series = series;
 
-        // workaround for change from number to datetime not propagated properly to chart object
-        $timeout(function(){
-          var chart = ctrl.histogram.getHighcharts();
+        $timeout(redrawChart, 0);
+      }
+
+      // workaround for change from number to datetime not propagated properly to chart object
+      function redrawChart() {
+        var chart = ctrl.histogram.getHighcharts && ctrl.histogram.getHighcharts();
+        if (chart) {
           chart.xAxis[0].type = ctrl.histogram.xAxis.type;
           chart.xAxis[0].isDirty = true;
           if (!globalHasYear) {
             delete chart.xAxis[0].categories;
           }
           chart.redraw();
-        }, 0);
+        } else {
+          console.log('Histogram chart not initialized. Is Highcharts enabled?');
+        }
       }
     };
 
