@@ -1,0 +1,45 @@
+{
+  "name": "ml-histogram-ng",
+  "version": "0.9.0",
+  "description": "Angular directive for showing one or more dynamic date bucket MarkLogic facets as a histogram",
+  "main": [
+    "dist/ml-histogram-ng.js",
+    "dist/ml-histogram-ng.css"
+  ],
+  "dependencies": {
+    "angular": ">1.3.1"
+  },
+  "devDependencies": {
+    "angular-mocks": ">1.2.14"
+  },
+  "moduleType": [
+    "globals"
+  ],
+  "authors": [
+    "grtjn"
+  ],
+  "homepage": "http://grtjn.github.io/ml-histogram-ng/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/grtjn/ml-histogram-ng.git"
+  },
+  "keywords": [
+    "angular",
+    "angularjs",
+    "marklogic",
+    "sparql"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    ".tmp",
+    "build",
+    "test",
+    "coverage",
+    "gulpfile.js",
+    "karma.conf.js",
+    "package.json"
+  ]
+}
