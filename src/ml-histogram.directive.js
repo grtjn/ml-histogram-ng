@@ -19,7 +19,7 @@
         type: '@',
         colors: '='
       },
-      templateUrl: '/ml-histogram-ng/ml-histogram-ng.html'
+      templateUrl: '/ml-histogram-ng/ml-histogram.html'
     };
   }
 

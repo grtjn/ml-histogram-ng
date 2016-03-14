@@ -1,4 +1,10 @@
 (function () {
+  'use strict';
+
+  angular.module('ml.histogram', []);
+}());
+
+(function () {
 
   'use strict';
 
@@ -19,7 +25,7 @@
         type: '@',
         colors: '='
       },
-      templateUrl: '/ml-histogram-ng/ml-histogram-ng.html'
+      templateUrl: '/ml-histogram-ng/ml-histogram.html'
     };
   }
 
@@ -294,12 +300,6 @@
 
 }());
 
-(function () {
-  'use strict';
-
-  angular.module('ml.histogram', []);
-}());
-
 (function(module) {
 try {
   module = angular.module('ml.histogram.tpls');
@@ -307,7 +307,7 @@ try {
   module = angular.module('ml.histogram.tpls', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('/ml-histogram-ng/ml-histogram-ng.html',
+  $templateCache.put('/ml-histogram-ng/ml-histogram.html',
     '<div class="ml-histogram-ng">\n' +
     '  <highchart config="ctrl.histogram"></highchart>\n' +
     '</div>');
