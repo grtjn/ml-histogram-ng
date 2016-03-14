@@ -26,7 +26,8 @@
         toggle: '&',
         title: '@',
         type: '@',
-        colors: '='
+        colors: '=',
+        legend: '@'
       },
       templateUrl: '/ml-histogram-ng/ml-histogram.html'
     };
@@ -85,6 +86,9 @@
               return false;
             }
           }
+        },
+        legend: {
+          enabled: ($scope.legend+'') === 'true'
         },
         colors: $scope.colors || ['black', '#337ab7'],
         plotOptions: {
