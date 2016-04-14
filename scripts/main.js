@@ -106,7 +106,7 @@
           Period2: angular.copy(yearsResponse.facets.Period2)
         };
       }
-      $scope.$apply();
+      $scope.$digest();
     };
 
   }
