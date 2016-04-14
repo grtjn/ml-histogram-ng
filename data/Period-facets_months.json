@@ -1,0 +1,147 @@
+{
+  "snippet-format": "snippet",
+  "total": 99640,
+  "start": 1,
+  "page-length": 10,
+  "selected": "include",
+  "results": [],
+  "facets": {
+    "Period1": {
+      "type": "custom",
+      "facetValues": [{
+        "name": "2014-01",
+        "count": 7592,
+        "value": "2014-01"
+      }, {
+        "name": "2014-02",
+        "count": 6880,
+        "value": "2014-02"
+      }, {
+        "name": "2014-03",
+        "count": 7908,
+        "value": "2014-03"
+      }, {
+        "name": "2014-04",
+        "count": 7638,
+        "value": "2014-04"
+      }, {
+        "name": "2014-05",
+        "count": 8643,
+        "value": "2014-05"
+      }, {
+        "name": "2014-06",
+        "count": 9684,
+        "value": "2014-06"
+      }, {
+        "name": "2014-07",
+        "count": 9342,
+        "value": "2014-07"
+      }, {
+        "name": "2014-08",
+        "count": 9335,
+        "value": "2014-08"
+      }, {
+        "name": "2014-09",
+        "count": 9160,
+        "value": "2014-09"
+      }, {
+        "name": "2014-10",
+        "count": 8472,
+        "value": "2014-10"
+      }, {
+        "name": "2014-11",
+        "count": 7610,
+        "value": "2014-11"
+      }, {
+        "name": "2014-12",
+        "count": 7376,
+        "value": "2014-12"
+      }]
+    },
+    "Period2": {
+      "type": "custom",
+      "facetValues": [{
+        "name": "2014-01",
+        "count": 302,
+        "value": "2014-01"
+      }, {
+        "name": "2014-02",
+        "count": 522,
+        "value": "2014-02"
+      }, {
+        "name": "2014-03",
+        "count": 484,
+        "value": "2014-03"
+      }, {
+        "name": "2014-04",
+        "count": 889,
+        "value": "2014-04"
+      }, {
+        "name": "2014-05",
+        "count": 478,
+        "value": "2014-05"
+      }, {
+        "name": "2014-06",
+        "count": 644,
+        "value": "2014-06"
+      }, {
+        "name": "2014-07",
+        "count": 556,
+        "value": "2014-07"
+      }, {
+        "name": "2014-08",
+        "count": 393,
+        "value": "2014-08"
+      }, {
+        "name": "2014-09",
+        "count": 602,
+        "value": "2014-09"
+      }, {
+        "name": "2014-10",
+        "count": 717,
+        "value": "2014-10"
+      }, {
+        "name": "2014-11",
+        "count": 764,
+        "value": "2014-11"
+      }, {
+        "name": "2014-12",
+        "count": 409,
+        "value": "2014-12"
+      }]
+    }
+  },
+  "query": {
+    "and-query": [{
+      "collection-query": [{
+        "uri": "data/complaints"
+      }],
+      "field-range-query": [{
+        "operator": ">=",
+        "field": "Date",
+        "value": [{
+          "type": "xs:date",
+          "_value": "2014-01-01"
+        }]
+      }, {
+        "operator": "<",
+        "field": "Date",
+        "value": [{
+          "type": "xs:date",
+          "_value": "2015-01-01"
+        }]
+      }],
+      "annotation": [{
+        "operator-ref": "results",
+        "state-ref": "compact"
+      }]
+    }]
+  },
+  "qtext": "Collection:\"complaints\"",
+  "metrics": {
+    "facet-resolution-time": "PT0.077613S",
+    "metadata-resolution-time": null,
+    "extract-resolution-time": null,
+    "total-time": "PT0.097707S"
+  }
+}
