@@ -45,18 +45,18 @@
     ctrl.toggleFacet = function() {
       if (ctrl.histogramFacets && ctrl.histogramFacets.Period1.facetValues[1].value === '1996') {
         ctrl.histogramFacets = {
-          Period1: monthsResponse.facets.Period1,
-          Period2: monthsResponse.facets.Period2
+          Period1: angular.copy(monthsResponse.facets.Period1),
+          Period2: angular.copy(monthsResponse.facets.Period2)
         };
       } else if (ctrl.histogramFacets && ctrl.histogramFacets.Period1.facetValues[0].value === '2014-01') {
         ctrl.histogramFacets = {
-          Period1: daysResponse.facets.Period1,
-          Period2: daysResponse.facets.Period2
+          Period1: angular.copy(daysResponse.facets.Period1),
+          Period2: angular.copy(daysResponse.facets.Period2)
         };
       } else {
         ctrl.histogramFacets = {
-          Period1: yearsResponse.facets.Period1,
-          Period2: yearsResponse.facets.Period2
+          Period1: angular.copy(yearsResponse.facets.Period1),
+          Period2: angular.copy(yearsResponse.facets.Period2)
         };
       }
     };
