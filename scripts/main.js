@@ -89,12 +89,12 @@
       });
 
     ctrl.toggleFacet = function() {
-      if (ctrl.histogramFacets.Period1.facetValues[1].value === '1996') {
+      if (ctrl.histogramFacets && ctrl.histogramFacets.Period1.facetValues[1].value === '1996') {
         ctrl.histogramFacets = {
           Period1: monthsResponse.facets.Period1,
           Period2: monthsResponse.facets.Period2
         };
-      } else if (ctrl.histogramFacets.Period1.facetValues[0].value === '2014-01') {
+      } else if (ctrl.histogramFacets && ctrl.histogramFacets.Period1.facetValues[0].value === '2014-01') {
         ctrl.histogramFacets = {
           Period1: daysResponse.facets.Period1,
           Period2: daysResponse.facets.Period2
