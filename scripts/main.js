@@ -76,6 +76,7 @@
       .get('data/Period-facets_years.json')
       .success(function(response) {
         yearsResponse = response;
+        ctrl.toggleFacet();
       });
     $http
       .get('data/Period-facets_months.json')
@@ -106,8 +107,6 @@
         };
       }
     };
-
-    ctrl.toggleFacet();
 
   }
 
