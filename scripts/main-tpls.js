@@ -6,7 +6,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('/home.html',
-    '<h1 class="page-header" itemprop="name">MarkLogic Histogram for Angular</h1><div class="home row"><h4>Key features</h4><ul><li>..</li></ul><h4>Example</h4><div class="row"><div class="col-md-4 col-md-offset-1"><ml-histogram facets="ctrl.histogramFacets" toggle="ctrl.toggleFacet(facet, value)" title="Period1 vs Period2" type="line"></ml-histogram></div></div><div style="display:none">{{ctrl.words}}</div></div>');
+    '<h1 class="page-header" itemprop="name">MarkLogic Histogram for Angular</h1><div class="home row"><h4>Key features</h4><ul><li>..</li></ul><h4>Example</h4><div class="row"><div class="col-md-8 col-md-offset-1"><ml-histogram facets="ctrl.histogramFacets" toggle="ctrl.toggleFacet(facet, value)" title="Period1 vs Period2" type="line"></ml-histogram></div></div><div style="display:none">{{ctrl.words}}</div></div>');
 }]);
 })();
 
