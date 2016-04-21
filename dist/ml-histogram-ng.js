@@ -70,17 +70,16 @@
                   return s.hasYearMonth;
                 }).length > 0;
 
-                //ctrl.mlSearch.clearFacet('Period');
                 if (hasYear) {
-                  ctrl.toggleFacet('Period', min + '-' + max);
+                  ctrl.toggleFacet(ctrl.histogram.series[0].name, min + '-' + max);
                 } else if (hasYearMonth) {
                   min = new Date(min).toISOString().substr(0,7);
                   max = new Date(max).toISOString().substr(0,7);
-                  ctrl.toggleFacet('Period', min + '-' + max);
+                  ctrl.toggleFacet(ctrl.histogram.series[0].name, min + '-' + max);
                 } else {
                   min = new Date(min).toISOString().substr(0,10);
                   max = new Date(max).toISOString().substr(0,10);
-                  ctrl.toggleFacet('Period', min + '-' + max);
+                  ctrl.toggleFacet(ctrl.histogram.series[0].name, min + '-' + max);
                 }
               }
               return false;
@@ -105,22 +104,21 @@
                 click: function (e) {
                   // var posx = e.pageX || e.clientX;
                   // var posy = e.pageY || e.clientY;
-                  var collection = this.series.name;
+                  var facet = this.series.name;
                   var series = ctrl.histogram.series.filter(function(s){
-                    return s.name === collection;
+                    return s.name === facet;
                   })[0];
                   var x = this.category || this.x;
                   if ((x+'').match(/^[≤≥]/)) {
                     x = +(x+'').substr(1);
                   }
                   // var y = this.y;
-                  //ctrl.mlSearch.clearFacet('Period');
                   if (series.hasYear) {
-                    ctrl.toggleFacet('Period', x);
+                    ctrl.toggleFacet(facet, x);
                   } else if (series.hasYearMonth) {
-                    ctrl.toggleFacet('Period', new Date(x).toISOString().substr(0,7));
+                    ctrl.toggleFacet(facet, new Date(x).toISOString().substr(0,7));
                   } else {
-                    ctrl.toggleFacet('Period', new Date(x).toISOString().substr(0,10));
+                    ctrl.toggleFacet(facet, new Date(x).toISOString().substr(0,10));
                   }
                 }
               }
