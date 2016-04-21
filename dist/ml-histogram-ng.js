@@ -141,6 +141,7 @@
       },
 
       xAxis: {
+        type: 'datetime',
         title: {
           text: 'Date'
         },
@@ -297,6 +298,11 @@
         if (chart) {
           chart.xAxis[0].type = ctrl.histogram.xAxis.type;
           chart.xAxis[0].isDirty = true;
+          if (ctrl.histogram.xAxis.type === 'datetime') {
+            chart.xAxis[0].isDatetimeAxis = true;
+          } else {
+            chart.xAxis[0].isDatetimeAxis = false;
+          }
           if (!globalHasYear) {
             delete chart.xAxis[0].categories;
           }

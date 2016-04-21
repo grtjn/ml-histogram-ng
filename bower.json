@@ -1,6 +1,6 @@
 {
   "name": "ml-histogram-ng",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Angular directive for showing one or more dynamic date bucket MarkLogic facets as a histogram",
   "main": [
     "dist/ml-histogram-ng.js",
