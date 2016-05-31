@@ -219,8 +219,8 @@
 
         if (globalHasYear) {
 
-          ctrl.histogram.xAxis.isDirty = ctrl.histogram.xAxis.type !== 'number';
-          ctrl.histogram.xAxis.type = 'number';
+          ctrl.histogram.xAxis.isDirty = ctrl.histogram.xAxis.type !== 'category';
+          ctrl.histogram.xAxis.type = 'category';
 
           // convert Dates to year
           angular.forEach(series, function(serie, index) {
@@ -294,7 +294,9 @@
           } else {
             chart.xAxis[0].isDatetimeAxis = false;
           }
-          if (!globalHasYear) {
+          if (globalHasYear) {
+            chart.xAxis[0].categories = ctrl.histogram.xAxis.categories;
+          } else {
             delete chart.xAxis[0].categories;
           }
           chart.redraw();
