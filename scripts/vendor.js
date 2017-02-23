@@ -80247,8 +80247,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           series.push({
             name: facetName,
             data: data,
-            hasYear: facetTypes[facetName].hasYear,
-            hasYearMonth: facetTypes[facetName].hasYearMonth
+            hasYear: globalHasYear,
+            hasYearMonth: globalHasYearMonth
           });
         });
 
