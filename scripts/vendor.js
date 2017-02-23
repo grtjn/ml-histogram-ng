@@ -80022,17 +80022,16 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
                   return s.hasYearMonth;
                 }).length > 0;
 
-                //ctrl.mlSearch.clearFacet('Period');
                 if (hasYear) {
-                  ctrl.toggleFacet('Period', min + '-' + max);
+                  ctrl.toggleFacet(ctrl.histogram.series[0].name, min + '-' + max);
                 } else if (hasYearMonth) {
                   min = new Date(min).toISOString().substr(0,7);
                   max = new Date(max).toISOString().substr(0,7);
-                  ctrl.toggleFacet('Period', min + '-' + max);
+                  ctrl.toggleFacet(ctrl.histogram.series[0].name, min + '-' + max);
                 } else {
                   min = new Date(min).toISOString().substr(0,10);
                   max = new Date(max).toISOString().substr(0,10);
-                  ctrl.toggleFacet('Period', min + '-' + max);
+                  ctrl.toggleFacet(ctrl.histogram.series[0].name, min + '-' + max);
                 }
               }
               return false;
@@ -80057,22 +80056,21 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
                 click: function (e) {
                   // var posx = e.pageX || e.clientX;
                   // var posy = e.pageY || e.clientY;
-                  var collection = this.series.name;
+                  var facet = this.series.name;
                   var series = ctrl.histogram.series.filter(function(s){
-                    return s.name === collection;
+                    return s.name === facet;
                   })[0];
                   var x = this.category || this.x;
                   if ((x+'').match(/^[≤≥]/)) {
                     x = +(x+'').substr(1);
                   }
                   // var y = this.y;
-                  //ctrl.mlSearch.clearFacet('Period');
                   if (series.hasYear) {
-                    ctrl.toggleFacet('Period', x);
+                    ctrl.toggleFacet(facet, x);
                   } else if (series.hasYearMonth) {
-                    ctrl.toggleFacet('Period', new Date(x).toISOString().substr(0,7));
+                    ctrl.toggleFacet(facet, new Date(x).toISOString().substr(0,7));
                   } else {
-                    ctrl.toggleFacet('Period', new Date(x).toISOString().substr(0,10));
+                    ctrl.toggleFacet(facet, new Date(x).toISOString().substr(0,10));
                   }
                 }
               }
@@ -80095,6 +80093,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
       },
 
       xAxis: {
+        type: 'datetime',
         title: {
           text: 'Date'
         },
@@ -80130,43 +80129,117 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
         var xCategories = [];
         var globalHasYear = false;
         var globalHasYearMonth = false;
+        var facetTypes = {};
 
+        // check for mixtures of year, year-month, and date facets
         angular.forEach(facets, function(facet, facetName) {
-          var data = [];
           var hasYear = false;
           var hasYearMonth = false;
 
           angular.forEach(facet.facetValues, function(value, index) {
-            var val = value.value;
-            var pos;
-            if (val.match(/^[≤≥]/)) {
-              pos = xCategories.indexOf(val.substr(1));
-              if (pos >= 0) {
-                xCategories[pos] = val;
-              }
-            }
-            pos = xCategories.indexOf(val);
-            if (pos < 0) {
-              pos = xCategories.indexOf('≤'+val);
-              if (pos < 0) {
-                pos = xCategories.indexOf('≥'+val);
-                if (pos < 0) {
-                  pos = xCategories.length;
-                  xCategories.push(val);
-                }
-              }
-            }
-            if (val.match(/^[≤≥]\d\d\d\d$/)) {
+            if (value.value.match(/^[≤≥]?\d\d\d\d$/)) {
               hasYear = globalHasYear = true;
-              val = pos;
-            } else if (value.value.match(/^\d\d\d\d$/)) {
-              hasYear = globalHasYear = true;
-              val = pos;
             } else if (value.value.match(/^\d\d\d\d-\d\d$/)) {
               hasYearMonth = globalHasYearMonth = true;
-              val = new Date(value.value + '-01');
+            }
+          });
+
+          facetTypes[facetName] = {
+            hasYear: hasYear,
+            hasYearMonth: hasYearMonth
+          };
+        });
+
+        facets = angular.copy(facets);
+
+        // normalize all facets to same datatype
+        // year is strongest, year-month second
+        angular.forEach(facets, function(facet, facetName) {
+          var newKeys = {};
+          var newValues = [];
+
+          if (globalHasYear) {
+            if (facetTypes[facetName].hasYear) {
+              // nothing to do
+            } else if (facetTypes[facetName].hasYearMonth) {
+              // strip month from year-month, and aggregate
+              angular.forEach(facet.facetValues, function(value, index) {
+                var key = value.value.substring(0,4);
+                newKeys[key] = (newKeys[key] || 0) + value.count;
+              });
             } else {
-              val = new Date(value.value);
+              // strip month-day from date, and aggregate
+              angular.forEach(facet.facetValues, function(value, index) {
+                var key = value.value.substring(0,4);
+                newKeys[key] = (newKeys[key] || 0) + value.count;
+              });
+            }
+          } else if (globalHasYearMonth) {
+            if (facetTypes[facetName].hasYear) {
+              // should not be reached!
+              throw 'ml-histogram-ng execution error';
+            } else if (facetTypes[facetName].hasYearMonth) {
+              // nothing to do
+            } else {
+              // strip day from date, and aggregate
+              angular.forEach(facet.facetValues, function(value, index) {
+                var key = value.value.substring(0,7);
+                newKeys[key] = (newKeys[key] || 0) + value.count;
+              });
+            }
+          }
+
+          // convert aggregated counts to facetValues
+          if (Object.keys(newKeys).length > 0) {
+            angular.forEach(newKeys, function(count, key) {
+              newValues.push({
+                name: key,
+                count: count,
+                value: key
+              });
+            });
+            facet.facetValues = newValues;
+          }
+        });
+
+        angular.forEach(facets, function(facet, facetName) {
+          var data = [];
+
+          angular.forEach(facet.facetValues, function(value, index) {
+            var val = value.value;
+            var pos;
+
+            if (globalHasYear) {
+              // use categories for year to support ≤≥
+
+              // prefer ≤≥jjjj for display of years
+              if (val.match(/^[≤≥]/)) {
+                pos = xCategories.indexOf(val.substr(1));
+                if (pos >= 0) {
+                  xCategories[pos] = val;
+                }
+              }
+
+              // build categories list for years
+              pos = xCategories.indexOf(val);
+              if (pos < 0) {
+                pos = xCategories.indexOf('≤'+val);
+                if (pos < 0) {
+                  pos = xCategories.indexOf('≥'+val);
+                  if (pos < 0) {
+                    pos = xCategories.length;
+                    xCategories.push(val);
+                  }
+                }
+              }
+
+              val = pos;
+            } else if (globalHasYearMonth) {
+              // let highcharts generate labels, highcharts works with timestamp
+              val = new Date(value.value + '-01').getTime();
+            } else {
+              // let highcharts generate labels, highcharts works with timestamp
+              val = new Date(value.value).getTime();
             }
             data.push([val, value.count]);
           });
@@ -80174,54 +80247,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           series.push({
             name: facetName,
             data: data,
-            hasYear: hasYear,
-            hasYearMonth: hasYearMonth
+            hasYear: facetTypes[facetName].hasYear,
+            hasYearMonth: facetTypes[facetName].hasYearMonth
           });
         });
 
         if (globalHasYear) {
 
-          ctrl.histogram.xAxis.isDirty = ctrl.histogram.xAxis.type !== 'number';
-          ctrl.histogram.xAxis.type = 'number';
-
-          // convert Dates to year
-          angular.forEach(series, function(serie, index) {
-            angular.forEach(serie.data, function(point, index) {
-              if (angular.isDate(point[0])) {
-                var val = point[0].getFullYear();
-                var pos = xCategories.indexOf(val);
-                if (pos < 0) {
-                  pos = xCategories.indexOf('≤'+val);
-                  if (pos < 0) {
-                    pos = xCategories.indexOf('≥'+val);
-                    if (pos < 0) {
-                      pos = xCategories.length;
-                      xCategories.push(val);
-                    }
-                  }
-                }
-                serie.data[index] = [pos, point[1]];
-              }
-            });
-          });
-
-        } else {
-
-          ctrl.histogram.xAxis.isDirty = ctrl.histogram.xAxis.type !== 'datetime';
-          ctrl.histogram.xAxis.type = 'datetime';
-
-          // convert Dates to millisec
-          angular.forEach(series, function(serie, index) {
-            angular.forEach(serie.data, function(point, index) {
-              if (angular.isDate(point[0])) {
-                serie.data[index] = [point[0].getTime(), point[1]];
-              }
-            });
-          });
-
-        }
-
-        if (globalHasYear) {
+          // sort the labels by year, while ignoring ≤≥
           var sortedXCategories = xCategories.slice().sort(function(l, r) {
             l = Number((l+'').replace(/[≤≥]/, ''));
             r = Number((r+'').replace(/[≤≥]/, ''));
@@ -80237,9 +80270,22 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           ctrl.histogram.xAxis.categories = sortedXCategories;
 
         } else {
+
+          // flush categories to not confuse Highcharts
           delete ctrl.histogram.xAxis.categories;
+
         }
 
+        // make sure highcharts responds to xAxis type changes
+        if (globalHasYear) {
+          ctrl.histogram.xAxis.isDirty = ctrl.histogram.xAxis.type !== 'category';
+          ctrl.histogram.xAxis.type = 'category';
+        } else {
+          ctrl.histogram.xAxis.isDirty = ctrl.histogram.xAxis.type !== 'datetime';
+          ctrl.histogram.xAxis.type = 'datetime';
+        }
+
+        // Last but not least, update histogram series data
         ctrl.histogram.series = series;
 
         $timeout(redrawChart, 0);
@@ -80251,7 +80297,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
         if (chart) {
           chart.xAxis[0].type = ctrl.histogram.xAxis.type;
           chart.xAxis[0].isDirty = true;
-          if (!globalHasYear) {
+          if (ctrl.histogram.xAxis.type === 'datetime') {
+            chart.xAxis[0].isDatetimeAxis = true;
+          } else {
+            chart.xAxis[0].isDatetimeAxis = false;
+          }
+          if (globalHasYear) {
+            chart.xAxis[0].categories = ctrl.histogram.xAxis.categories;
+          } else {
             delete chart.xAxis[0].categories;
           }
           chart.redraw();
