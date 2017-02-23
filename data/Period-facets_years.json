@@ -181,6 +181,30 @@
         "count": 7791,
         "value": "2015"
       }]
+    },
+    "Period3": {
+      "type": "custom",
+      "facetValues": [{
+        "name": "1995-01",
+        "count": 28801,
+        "value": "1995-01"
+      }, {
+        "name": "1995-02",
+        "count": 2077,
+        "value": "1995-02"
+      }]
+    },
+    "Period4": {
+      "type": "custom",
+      "facetValues": [{
+        "name": "2014-06-02",
+        "count": 4,
+        "value": "2014-06-02"
+      }, {
+        "name": "2014-06-04",
+        "count": 43,
+        "value": "2014-06-04"
+      }]
     }
   },
   "query": {
